@@ -753,3 +753,35 @@ bool canPlayCard(player& curr_player, card& played_card) {
 
 	return false;
 }
+
+// Function to handle Draw 1 and Skip rule
+void drawOneAndSkip(player& curr_player, deck& main_deck, card& played_card, bool& force_draw_bool, deck& temp_deck) {
+	card draw_temp = main_deck.draw();
+	cout << "DRAWN CARD: " << draw_temp << endl;
+
+	if (draw_temp == played_card && draw_temp.color != wild) {
+		int play_draw_flag = 0;
+		while (play_draw_flag == 0) {
+			string temp_play;
+			cout << "Do you want to play the drawn card [y/n] : ";
+			cin >> temp_play;
+			if (temp_play == "y") {
+				/*played_card = draw_temp;
+				temp_deck.add_card(draw_temp);
+				if (played_card.number >= 10 && played_card.number <= 14) {
+					force_draw_bool = true;
+				}
+				play_draw_flag = 1;*/
+				undoLastMove(played_card);
+				play_draw_flag = 1;
+			}
+			if (temp_play == "n") {
+				curr_player.hand_add(draw_temp);
+				play_draw_flag = 1;
+			}
+		}
+	}
+	else {
+		curr_player.hand_add(draw_temp);
+	}
+}
