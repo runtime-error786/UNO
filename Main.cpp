@@ -806,3 +806,37 @@ void reviewPastMoves() {
 		cout << "Move " << i + 1 << ": Played Card - " << snapshot.played_card << endl;
 	}
 }
+
+class PlayerProfile {
+private:
+	string playerName;
+	int gamesWon;
+
+public:
+	// Constructor
+	PlayerProfile(const string& name) : playerName(name), gamesWon(0) {}
+
+	// Accessors
+	string getName() const { return playerName; }
+	int getGamesWon() const { return gamesWon; }
+
+	// Increment games won
+	void winGame() { gamesWon++; }
+
+	// Save profile to a file
+	void saveProfile() {
+		ofstream outFile(playerName + "_profile.txt");
+		outFile << playerName << " " << gamesWon;
+		outFile.close();
+	}
+
+	// Load profile from a file
+	void loadProfile() {
+		ifstream inFile(playerName + "_profile.txt");
+		if (inFile.is_open()) {
+			inFile >> playerName >> gamesWon;
+			inFile.close();
+		}
+	}
+};
+
