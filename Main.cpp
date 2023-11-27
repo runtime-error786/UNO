@@ -1098,39 +1098,8 @@ int main()
 		while (check_flag == 0)
 		{
 			cout << "Which card do you want to play? " << endl;
-			cout << "If you want to draw a card, please enter '-1' " << endl;
-			cout << "Type the index of the card and press enter: ";
-			cin >> index;
-
-			if (index == -1)
-			{
-				drawOneAndSkip(*curr_player, main_deck, played_card, force_draw_bool, temp_deck);
-				check_flag = 1;
-			}
-			else if (index >= 0 && index < size)
-			{
-				card temp = curr_player->peek(index);
-				if (temp == played_card)
-				{
-					curr_player->hand_remove(index);
-					temp_deck.add_card(temp);
-					played_card = temp;
-
-					if (played_card.color == wild)
-					{
-						cout << "Choose a color for the wild card (red, green, blue, yellow): ";
-						string chosen_color;
-						cin >> chosen_color;
-						played_card.color = FromString(chosen_color);
-						force_draw_bool = true;
-					}
-
-					check_flag = 1;
-				}
-				else
-				{
-
-					cout << "Card cannot be played." << endl;
+		
+			t be played." << endl;
 				}
 			}
 			else
@@ -1153,47 +1122,6 @@ int main()
 		if (played_card.number == 11 && force_draw_bool == true)
 		{
 			turn += (turn_flag == 1) ? 2 : -2;
-		}
-		else if (played_card.number == 12 && force_draw_bool == true)
-		{
-			if (amount_players == 2)
-			{
-				turn += 2;
-			}
-			else
-			{
-				turn_flag = -turn_flag;
-				turn += turn_flag;
-			}
-		}
-		else
-		{
-			turn += turn_flag;
-		}
-
-		system("cls"); // for Windows
-
-		cout << "Cards remaining for each player: " << endl;
-		for (int i = 0; i < amount_players; i++)
-		{
-			cout << "Player " << playerProfiles[i].getName() << ": " << play_array[i].get_size() << "   ";
-		}
-		cout << endl;
-
-		cout << "Played Card: " << played_card << endl;
-		confirm_turn(turn % amount_players);
-
-		if (main_deck.get_size() < 10)
-		{
-			while (main_deck.get_size() > 0)
-			{
-				temp_deck.add_card(main_deck.draw());
-			}
-
-			main_deck = temp_deck;
-			main_deck.quick_shuffle();
-
-			temp_deck = deck();
 		}
 
 	}
