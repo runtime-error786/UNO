@@ -707,3 +707,35 @@ card player::peek(int pos) const
 
 
 
+
+card chooseBotCard(player& bot, card& played_card) {
+	// Get the bot's hand size
+	int size = bot.get_size();
+
+	// Prioritize playing cards that match the current color over matching numbers
+	for (int i = 0; i < size; ++i) {
+		card temp = bot.peek(i);
+		if (temp.color == played_card.color && temp.number != played_card.number) {
+			return bot.hand_remove(i);
+		}
+	}
+
+	// Always play special cards first
+	for (int i = 0; i < size; ++i) {
+		card temp = bot.peek(i);
+		if (temp.number >= 10) {
+			return bot.hand_remove(i);
+		}
+	}
+
+	// If no match found, play any card that matches the color
+	for (int i = 0; i < size; ++i) {
+		card temp = bot.peek(i);
+		if (temp.color == played_card.color) {
+			return bot.hand_remove(i);
+		}
+	}
+
+	// If no match found, play any card
+	return bot.hand_remove(0);
+}
