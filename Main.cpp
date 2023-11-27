@@ -187,14 +187,6 @@ std::ostream& operator<<(std::ostream& out, deck const& temp_deck);
 #endif 
 
 
-/**********************************************************
- * deck.cpp
- *
- * deck class implementation
- *
- *   Author: Com L.
- *   Date: Summer 2015
- */
 
 
  /* Game UNO - wikipedia
@@ -783,5 +775,34 @@ void drawOneAndSkip(player& curr_player, deck& main_deck, card& played_card, boo
 	}
 	else {
 		curr_player.hand_add(draw_temp);
+	}
+}
+
+struct GameStateSnapshot {
+	card played_card;
+	// Add other members to represent the state of the game
+	// For example, vector<player>, deck, etc.
+};
+
+vector<GameStateSnapshot> gameSnapshots;
+
+void logGameEvent(const card& played_card) {
+	GameStateSnapshot snapshot;
+	snapshot.played_card = played_card;
+	gameSnapshots.push_back(snapshot);
+}
+
+void undoLastMove(card& played_card) {
+	if (!gameSnapshots.empty()) {
+		GameStateSnapshot previousSnapshot = gameSnapshots.back();
+		played_card = previousSnapshot.played_card;
+		gameSnapshots.pop_back();
+	}
+}
+
+void reviewPastMoves() {
+	for (size_t i = 0; i < gameSnapshots.size(); ++i) {
+		const auto& snapshot = gameSnapshots[i];
+		cout << "Move " << i + 1 << ": Played Card - " << snapshot.played_card << endl;
 	}
 }
