@@ -739,3 +739,17 @@ card chooseBotCard(player& bot, card& played_card) {
 	// If no match found, play any card
 	return bot.hand_remove(0);
 }
+
+
+bool canPlayCard(player& curr_player, card& played_card) {
+	int size = curr_player.get_size();
+
+	for (int i = 0; i < size; ++i) {
+		card temp = curr_player.peek(i);
+		if (temp == played_card) {
+			return true;
+		}
+	}
+
+	return false;
+}
