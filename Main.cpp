@@ -79,7 +79,6 @@ bool card::operator!=(card const& other) const
 std::ostream& operator<<(std::ostream& out, card const& temp_card)
 {
 	out << "Number:";
-	// << (int) temp_card.number << " Color: "; 
 	switch (temp_card.number)
 	{
 	case 10: out << "DRAW-2"; break;
@@ -93,16 +92,15 @@ std::ostream& operator<<(std::ostream& out, card const& temp_card)
 	out << "   Color:";
 	switch (temp_card.color)
 	{
-	case wild: out << "wild";  break;
-	case red: out << "red";  break;
-	case green: out << "green";  break;
-	case blue: out << "blue";  break;
-	case yellow: out << "yellow";  break;
+	case wild: out << "\033[1;35mwild\033[0m";  break; // Magenta color
+	case red: out << "\033[1;31mred\033[0m";  break;   // Red color
+	case green: out << "\033[1;32mgreen\033[0m";  break; // Green color
+	case blue: out << "\033[1;34mblue\033[0m";  break;   // Blue color
+	case yellow: out << "\033[1;33myellow\033[0m";  break; // Yellow color
 	default: out << "N/A"; break;
 	}
 	return out;
 }
-
 
 
 
@@ -1025,13 +1023,34 @@ int main()
 	play_array = new player[amount_players];
 
 
-	
+	for (int i = 0; i < amount_players; i++)
+	{
+		for (int k = 0; k < 7; k++)
+		{
+			card temp_card;
+			temp_card = main_deck.draw();
+			play_array[i].hand_add(temp_card);
+		}
+	}
+
 	deck temp_deck;
 	card played_card;
 	card temp_card;
 	int card_flag = 0;
 
-	
+	while (card_flag == 0)
+	{
+		temp_card = main_deck.draw();
+		if (temp_card.color != wild)
+		{
+			card_flag = 1;
+			played_card = temp_card;
+		}
+		else
+		{
+			temp_deck.add_card(temp_card);
+		}
+	}
 
 	// Randomize who starts first
 	srand(time(NULL));
@@ -1048,7 +1067,16 @@ int main()
 
 	while (win == 0)
 	{
-		
+		system("cls"); // for Windows
+		player* curr_player = &play_array[turn % amount_players];
+
+		cout << "Player " << playerProfiles[turn % amount_players].getName() << endl;
+
+		if (force_draw_bool)
+		{
+			drawOneAndSkip(*curr_player, main_deck, played_card, force_draw_bool, temp_deck);
+		}
+
 		cout << "Cards remaining for each player: " << endl;
 		for (int i = 0; i < amount_players; i++)
 		{
