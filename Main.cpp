@@ -976,3 +976,204 @@ void profile()
 }
 
 // i comment each function at thr timeof write
+
+
+int main()
+{
+	// clear screen
+	system("cls"); // for Windows
+
+	// Create a scoreboard
+	Scoreboard scoreboard;
+
+	// Get the number of players from the user
+	int amount_players;
+	int flag = 0;
+	while (flag == 0)
+	{
+		cout << "Please enter the number of players: ";
+		cin >> amount_players;
+		if (amount_players >= 2 && amount_players <= 5)
+		{
+			cout << amount_players << " players entering the game.... " << endl;
+			flag = 1;
+			break;
+		}
+		else
+		{
+			cout << "Invalid number of players" << endl;
+		}
+	}
+
+	// Create player profiles and add players to the scoreboard
+	vector<PlayerProfile> playerProfiles;
+	for (int i = 1; i <= amount_players; ++i)
+	{
+		string playerName;
+		cout << "Enter the name of Player " << i << ": ";
+		cin >> playerName;
+		playerProfiles.push_back(PlayerProfile(playerName));
+		scoreboard.addPlayer(playerName);
+	}
+
+	// Other game components
+	deck main_deck;
+	main_deck.create();
+	main_deck.quick_shuffle();
+
+	player* play_array;
+	play_array = new player[amount_players];
+
+
+	
+	deck temp_deck;
+	card played_card;
+	card temp_card;
+	int card_flag = 0;
+
+	
+
+	// Randomize who starts first
+	srand(time(NULL));
+	int turn = rand() % amount_players;
+	cout << "Player " << playerProfiles[turn].getName() << " is randomly selected to play first" << endl;
+	confirm_turn(turn);
+
+	bool force_draw_bool = false;
+	int turn_flag = 1;
+	int win = 0;
+
+	// Game logging
+	vector<GameStateSnapshot> gameSnapshots;
+
+	while (win == 0)
+	{
+		
+		cout << "Cards remaining for each player: " << endl;
+		for (int i = 0; i < amount_players; i++)
+		{
+			cout << "Player " << playerProfiles[i].getName() << ": " << play_array[i].get_size() << "   ";
+		}
+		cout << endl;
+
+		cout << "Played Card: " << played_card << endl;
+		cout << "Player " << playerProfiles[turn % amount_players].getName() << endl;
+
+		curr_player->print();
+		reviewPastMoves(); // Display past moves
+
+
+		int check_flag = 0;
+		int index;
+		int size = curr_player->get_size();
+
+		while (check_flag == 0)
+		{
+			cout << "Which card do you want to play? " << endl;
+			cout << "If you want to draw a card, please enter '-1' " << endl;
+			cout << "Type the index of the card and press enter: ";
+			cin >> index;
+
+			if (index == -1)
+			{
+				drawOneAndSkip(*curr_player, main_deck, played_card, force_draw_bool, temp_deck);
+				check_flag = 1;
+			}
+			else if (index >= 0 && index < size)
+			{
+				card temp = curr_player->peek(index);
+				if (temp == played_card)
+				{
+					curr_player->hand_remove(index);
+					temp_deck.add_card(temp);
+					played_card = temp;
+
+					if (played_card.color == wild)
+					{
+						cout << "Choose a color for the wild card (red, green, blue, yellow): ";
+						string chosen_color;
+						cin >> chosen_color;
+						played_card.color = FromString(chosen_color);
+						force_draw_bool = true;
+					}
+
+					check_flag = 1;
+				}
+				else
+				{
+
+					cout << "Card cannot be played." << endl;
+				}
+			}
+			else
+			{
+				cout << "Invalid index." << endl;
+			}
+			logGameEvent(played_card);
+
+		}
+
+		if (curr_player->get_size() == 0)
+		{
+			win = 1;
+			cout << "Player " << playerProfiles[turn % amount_players].getName() << " has won the game." << endl;
+			scoreboard.updateScoreboard(playerProfiles[turn % amount_players].getName());
+			break;
+		}
+		// Display the scoreboard after each move
+
+		if (played_card.number == 11 && force_draw_bool == true)
+		{
+			turn += (turn_flag == 1) ? 2 : -2;
+		}
+		else if (played_card.number == 12 && force_draw_bool == true)
+		{
+			if (amount_players == 2)
+			{
+				turn += 2;
+			}
+			else
+			{
+				turn_flag = -turn_flag;
+				turn += turn_flag;
+			}
+		}
+		else
+		{
+			turn += turn_flag;
+		}
+
+		system("cls"); // for Windows
+
+		cout << "Cards remaining for each player: " << endl;
+		for (int i = 0; i < amount_players; i++)
+		{
+			cout << "Player " << playerProfiles[i].getName() << ": " << play_array[i].get_size() << "   ";
+		}
+		cout << endl;
+
+		cout << "Played Card: " << played_card << endl;
+		confirm_turn(turn % amount_players);
+
+		if (main_deck.get_size() < 10)
+		{
+			while (main_deck.get_size() > 0)
+			{
+				temp_deck.add_card(main_deck.draw());
+			}
+
+			main_deck = temp_deck;
+			main_deck.quick_shuffle();
+
+			temp_deck = deck();
+		}
+
+	}
+
+	// Display the final scoreboard
+	scoreboard.displayScoreboard();
+
+	delete[] play_array; // free the allocated memory for the player array
+
+	return 0;
+}
