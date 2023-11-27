@@ -974,3 +974,5 @@ void profile()
 	}
 
 }
+
+// i comment each function at thr timeof write
