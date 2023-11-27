@@ -872,3 +872,54 @@ public:
 		}
 	}
 };
+
+void display_intro(string filename)
+{
+	string line;
+	fstream myfile;
+	myfile.open(filename.c_str());
+	/*c_str() is to fix the problem of C++ type mismatch of
+	‘std::string {aka std::basic_string<char>}’ and ‘const char*’
+	http://stackoverflow.com/questions/17750699/c-displaying-a-text-file-echo-a-text-file
+	*/
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			cout << line << endl;
+		}
+		myfile.close();
+	}
+	else
+	{
+		cout << "error unable to open file " << endl;
+	}
+
+}
+
+void confirm_turn(int x)
+{
+	/* http://www.cplusplus.com/forum/articles/7312/ */
+	cout << "Confirm Player " << x << " by typing '" << x << "' and pressing enter: ";
+	int temp = -1;  // Initialize temp to a default value
+	while (temp != x)
+	{
+		cin >> temp;
+	}
+}
+
+
+/* http://stackoverflow.com/questions/5938052/assigning-values-to-enumerated-types*/
+COLOR FromString(const string& str)
+{
+	if (str == "red")
+		return red;
+	else if (str == "green")
+		return green;
+	else if (str == "blue")
+		return blue;
+	else if (str == "yellow")
+		return yellow;
+	else
+		return wild;
+}
