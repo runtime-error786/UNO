@@ -938,3 +938,39 @@ void undoLastMove(card& played_card) {
 		gameSnapshots.pop_back();
 	}
 }
+
+void profile()
+{
+	Scoreboard scoreboard;
+
+	// Get the number of players from the user
+	int amount_players;
+	int flag = 0;
+	while (flag == 0)
+	{
+		cout << "Please enter the number of players: ";
+		cin >> amount_players;
+		if (amount_players >= 2 && amount_players <= 5)
+		{
+			cout << amount_players << " players entering the game.... " << endl;
+			flag = 1;
+			break;
+		}
+		else
+		{
+			cout << "Invalid number of players" << endl;
+		}
+	}
+
+	// Create player profiles and add players to the scoreboard
+	vector<PlayerProfile> playerProfiles;
+	for (int i = 1; i <= amount_players; ++i)
+	{
+		string playerName;
+		cout << "Enter the name of Player " << i << ": ";
+		cin >> playerName;
+		playerProfiles.push_back(PlayerProfile(playerName));
+		scoreboard.addPlayer(playerName);
+	}
+
+}
