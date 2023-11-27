@@ -923,3 +923,18 @@ COLOR FromString(const string& str)
 	else
 		return wild;
 }
+// logging
+void logGameEvent(const card& played_card) {
+	GameStateSnapshot snapshot;
+	snapshot.played_card = played_card;
+	gameSnapshots.push_back(snapshot);
+}
+
+// undo last move
+void undoLastMove(card& played_card) {
+	if (!gameSnapshots.empty()) {
+		GameStateSnapshot previousSnapshot = gameSnapshots.back();
+		played_card = previousSnapshot.played_card;
+		gameSnapshots.pop_back();
+	}
+}
