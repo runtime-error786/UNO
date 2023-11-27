@@ -840,3 +840,35 @@ public:
 	}
 };
 
+
+class Scoreboard {
+private:
+	vector<PlayerProfile> playerProfiles;
+
+public:
+	// Add a player to the scoreboard
+	void addPlayer(const string& playerName) {
+		PlayerProfile newPlayer(playerName);
+		newPlayer.loadProfile();  // Load existing profile if available
+		playerProfiles.push_back(newPlayer);
+	}
+
+	// Update scoreboard after a game is won
+	void updateScoreboard(const string& playerName) {
+		for (auto& profile : playerProfiles) {
+			if (profile.getName() == playerName) {
+				profile.winGame();
+				profile.saveProfile();
+				break;
+			}
+		}
+	}
+
+	// Display the scoreboard
+	void displayScoreboard() const {
+		cout << "Scoreboard:\n";
+		for (const auto& profile : playerProfiles) {
+			cout << profile.getName() << " - Games Won: " << profile.getGamesWon() << endl;
+		}
+	}
+};
