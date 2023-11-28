@@ -1,11 +1,5 @@
 
-/**
- * @file card.h
- * Definition of the card class for the deck class
- *
- * @author Com L. 
- * @date Summer 2015
- */
+
 #ifndef _CARD_H_
 #define _CARD_H_
 
