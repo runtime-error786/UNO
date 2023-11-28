@@ -21,7 +21,7 @@ class card
 		 * @param other Other card to check equality with. (can be put as next card)
 		 */
 		bool operator==(card const & other) const;
-
+ bool operator<(const card& other) const;
 		/**
 		 * Inequality operator.
 		 * @param other Other card to check inequality with.

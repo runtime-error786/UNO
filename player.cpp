@@ -37,22 +37,32 @@ player::~player()
 }
 
  
-void player::hand_add(card temp_card)
-{
-	//insert at the front of the linked list
+void player::hand_add(card temp_card) {
+    // Create a new node
+    card_elem* temp_ptr = new card_elem();
+    temp_ptr->data = temp_card;
+    temp_ptr->next = nullptr;
 
-	//create new code and assign data to it 
-	card_elem * temp_ptr; 
-	temp_ptr = new card_elem(); 
-	temp_ptr->data = temp_card; 
-	//link the node to the original list
-	temp_ptr->next = head; 
-	//change the head to point to new element
-	head = temp_ptr; 
-	//increment size
-	size++; 
+    // If the hand is empty or the new card should be inserted at the front
+    if (head == nullptr || temp_card < head->data) {
+        temp_ptr->next = head;
+        head = temp_ptr;
+    } else {
+        // Find the position to insert the new card
+        card_elem* current = head;
+        while (current->next != nullptr && current->next->data < temp_card) {
+            current = current->next;
+        }
 
+        // Insert the new card into the sorted position
+        temp_ptr->next = current->next;
+        current->next = temp_ptr;
+    }
+
+    // Increment size
+    size++;
 }
+
 
 card player::hand_remove(int pos)
 {

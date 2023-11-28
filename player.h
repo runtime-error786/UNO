@@ -34,6 +34,7 @@ class player
 		void print() const; 
 		int get_size() const; 
 		card peek(int pos) const; 
+		
 	private:
 		class card_elem
 		{

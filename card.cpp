@@ -12,6 +12,14 @@ card::card(int num, COLOR col) : number(num), color(col)
 {
 
 }
+bool card::operator<(const card& other) const {
+    // Compare first by number, then by color
+    if (number == other.number) {
+        return color < other.color;
+    }
+    return number < other.number;
+}
+
 
 bool card::operator==(card const & other) const 
 {
