@@ -1,9 +1,4 @@
-/**
- * @file card.cpp
- *
-* @author Com L. 
- * @date Summer 2015
- */
+
 #include "card.h"
 #include <windows.h>
 
