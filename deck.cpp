@@ -1,11 +1,3 @@
-/**********************************************************
- * deck.cpp
- *		  	
- * deck class implementation
- *		  	
- *   Author: Com L. 
- *   Date: Summer 2015
- */
 
 
 /* Game UNO - wikipedia
