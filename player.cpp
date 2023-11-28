@@ -1,11 +1,3 @@
-/**********************************************************
- * player.cpp
- *		  	
- * Player class implementation
- *		  	
- *   Author: Com L. 
- *   Date: Summer 2015
- */
 
 #include "card.h"
 #include "player.h"
