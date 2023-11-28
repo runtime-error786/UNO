@@ -1,0 +1,10 @@
+
+
+run test:
+ 1)  g++ -o test_program test.cpp card.cpp deck.cpp player.cpp -std=c++11
+
+ 2) .\test_program.exe
+
+ run code main:
+ 1) mingw32-make
+ 2) ./gameuno  
